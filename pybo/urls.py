@@ -3,5 +3,5 @@ from django.urls import include, path
 from pybo import views
 
 urlpatterns = [
-    # path(''),
+    path("", views.index, name="index"),  # 기본 URL 패턴
 ]
