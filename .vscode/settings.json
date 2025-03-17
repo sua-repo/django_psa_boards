@@ -19,5 +19,6 @@
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.diagnosticSeverityOverrides": {
         "reportAttributeAccessIssue": "none"
-    }
+    },
+    "djlint.ignore": ["T032", "T001", "D018"]
 }
