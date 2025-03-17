@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-08lanpy7ue5rzk!w^5-))-=z4_f(+6)r*r8*02)1fbel6y*&zw"
+SECRET_KEY = "django-insecure-^-70_uy5#y=!hs9!pr$9c)u0fwc@)oq=e1y5(43j(9ozn7zzi$"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "pybo.apps.PyboConfig" = "pybo"
-    "pybo",  # dev_1
+    "pybo",  # dev_2
 ]
 
 MIDDLEWARE = [
@@ -53,10 +52,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
+# 모든 앱이 공통으로 사용할 템플릿 디렉터리 - /templates
+# pybo 앱이 사용할 템플릿 디렉터리 - /templates/pybo
+# common 앱이 사용할 템플릿 디렉터리 - /templates/common
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -105,9 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ko-kr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -123,3 +125,20 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# django.db.backends.logger 설정 (실시간 SQL 로깅) # dev_2
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "console": {
+#             "class": "logging.StreamHandler",
+#         },
+#     },
+#     "loggers": {
+#         "django.db.backends": {
+#             "level": "DEBUG",
+#             "handlers": ["console"],
+#         },
+#     },
+# }

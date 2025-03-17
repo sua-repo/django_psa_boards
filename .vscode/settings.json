@@ -16,5 +16,8 @@
     "python.analysis.autoImportCompletions": true,
     "python.analysis.indexing": true,
     "python.analysis.completeFunctionParens": true,
-    "python.analysis.diagnosticMode": "workspace"
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportAttributeAccessIssue": "none"
+    }
 }
