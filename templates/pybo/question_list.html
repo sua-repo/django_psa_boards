@@ -1,15 +1,25 @@
 {% if question_list %}
     <ul>
-        {% comment "" %}
-            forloop.counter : 1부터 번호 매기기
-            forloop.counter0 : 0부터 번호 매기기
-            forloop.first : 처음이냐
-            forloop.last : 마지막이냐
-            {{ forloop.last }} {{ forloop.first }} {{ forloop.counter0 }} :
-        {% endcomment %}
         {% for question in question_list  %}
             <li>
-                <a href="/pybo/{{question.id}}/">{{ question.subject }}</a>
+                {% comment %}
+                    http://127.0.0.1:8000/pybo/3/ 
+                    슬러시 자동으로 붙여줌
+                {% endcomment %}
+
+                {% comment %}
+                    namespace (네임 스페이스)
+                    <a href="{% url 'pybo:detail' question_id=question.id %}">{{ question.subject }}</a>
+                    위의 a 태그가 정석
+
+                    question_id는 url.py에서 나온 것
+                    path("<int:question_id>/", views.detail), 
+
+                    question.id는 저 위에 for문에 있는 question 가져온 것 
+                {% endcomment %}
+                <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                
+
             </li>
         {% endfor %}     
             
