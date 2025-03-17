@@ -1,32 +1,30 @@
 {% load static %}
-<link rel="stylesheet" href="style.css" href="{% static 'bootstrap.min.css' %}">
-
-{% if question_list %}
-    <ul>
-        {% for question in question_list  %}
-            <li>
-                {% comment %}
-                    http://127.0.0.1:8000/pybo/3/ 
-                    슬러시 자동으로 붙여줌
-                {% endcomment %}
-
-                {% comment %}
-                    namespace (네임 스페이스)
-                    <a href="{% url 'pybo:detail' question_id=question.id %}">{{ question.subject }}</a>
-                    위의 a 태그가 정석
-
-                    question_id는 url.py에서 나온 것
-                    path("<int:question_id>/", views.detail), 
-
-                    question.id는 저 위에 for문에 있는 question 가져온 것 
-                {% endcomment %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="table-dark">
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if question_list %}
+        {% for question in question_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
                 <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
-                
-
-            </li>
-        {% endfor %}     
-            
-    </ul>
-{% else %}
-    <p>질문이 없습니다.</p>
-{% endif %}
+            </td>
+            <td>{{ question.create_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">질문이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
