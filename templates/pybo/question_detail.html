@@ -1,3 +1,16 @@
+{% comment %} static 모듈을 메모리에 올리는 것 {% endcomment %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+{% comment "" %}
+    STATIC_URL = "static/"
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]
+
+    => link 태그의 href가 href="http://127.0.0.1:8000/static/style.css" 로 바뀜
+{% endcomment %}
+<img src="{% static '1.jpg' %}" style="width: 150px; height: 150px;">
+
 <h1>
     {{ question.subject }}
 </h1>
@@ -5,3 +18,24 @@
 <div>
     {{ question.content }}
 </div>
+
+<h5>{{ question.answer_set.count }}개의 답변이 있습니다.</h5>
+
+{% comment %}
+    redirect("pybo:detail", question_id=question_id)
+    여기서 끌고 옴
+{% endcomment %}
+
+<div>
+    <ul>
+        {% for answer in question.answer_set.all %}
+            <li>{{ answer.content }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<form action="{% url 'pybo:answer_create' question.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="content" id="content" rows="15"></textarea>
+    <input type="submit" value="답변등록">
+</form>

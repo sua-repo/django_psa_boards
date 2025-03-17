@@ -9,5 +9,8 @@ app_name = "pybo"
 urlpatterns = [
     path("", views.index),
     # http://127.0.0.1:8000/pybo/<int:question_id>
-    path("<int:question_id>/", views.detail),  # dev_3
+    path("<int:question_id>/", views.detail, name="detail"),  # dev_3
+    path(
+        "answer/create/<int:question_id>/", views.answer_create, name="answer_create"
+    ),  # dev_5
 ]
