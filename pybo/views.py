@@ -1,7 +1,7 @@
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
-from pybo.form import QuestionForm
+from pybo.form import AnswerForm, QuestionForm
 from pybo.models import Answer
 from pybo.models import Question
 
@@ -32,28 +32,32 @@ def detail(request, question_id):
 #    ),  # dev_5
 
 
-# dev_5
+# dev_5 / dev_9
 def answer_create(request, question_id):
+    # dev_9
     question = get_object_or_404(Question, pk=question_id)
 
-    content = request.POST.get("content")
-    # SELECT * FROM question, answer WHERE answer.question_id = 6
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.create_date = timezone.now()
+            answer.question = question
+            answer.save()
+            return redirect("pybo:detail", question_id=question.id)
 
-    # 역방향 참조
-    # question.answer_set.create(content=content, create_date=timezone.now())
+    else:
+        return HttpResponseNotAllowed("Only Post is possible")
 
-    # 정방향 참조
-    answer = Answer(question=question, content=content, create_date=timezone.now())
-    answer.save()
-
-    return redirect("pybo:detail", question_id=question_id)
+    context = {"question": question, "form": form}
+    return render(request, "pybo/question_detail.html", context)
 
 
 # dev_9
 # path("question/create/", views.question_create, name="question_create"),  # dev_9
 def question_create(request):
 
-    print(request.POSTlget("content"))
+    print(request.POST.get("content"))
 
     if request.method == "POST":
         form = QuestionForm(request.POST)
