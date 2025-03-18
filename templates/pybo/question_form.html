@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- form 태그에 action 속성을 지정하지 않으면 현재 페이지의 URL이 기본 action으로 설정  -->
+    <form method="post">
+        {% csrf_token %}
+        <!-- HTML 코드를 자동으로 생성-->
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+</div>
+{% endblock content %}
