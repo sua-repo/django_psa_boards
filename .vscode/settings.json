@@ -20,5 +20,5 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportAttributeAccessIssue": "none"
     },
-    "djlint.ignore": ["T032", "T001", "D018", "H006", "H013"]
+    "djlint.ignore": ["T002", "T003", "T032", "T001", "D018", "H006", "H013", "H030", "H031"]
 }
