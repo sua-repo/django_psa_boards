@@ -11,6 +11,10 @@ from django.core.paginator import Paginator
 
 # http://127.0.0.1:8000/pybo/
 def index(request):
+
+    print(request.user)
+
+    # ?page=1
     page = request.GET.get("page", "1")  # 페이지
 
     question_list = Question.objects.order_by("-create_date")
@@ -69,7 +73,9 @@ def question_create(request):
     print(request.POST.get("content"))
 
     if request.method == "POST":
+
         form = QuestionForm(request.POST)
+
         if form.is_valid():
             question = form.save(commit=False)
             question.create_date = timezone.now()
@@ -78,4 +84,61 @@ def question_create(request):
 
     else:
         form = QuestionForm()
-        return render(request, "pybo/question_form.html", {"form": form})
+
+    context = {"form": form}
+    return render(request, "pybo/question_form.html", context)
+
+
+# dev_14
+# http://127.0.0.1:8000/pybo/set-cookie/
+def set_cookie_view(request):
+    """쿠키 설정"""
+    response = HttpResponse("쿠키가 설정되었습니다.")
+    response.set_cookie("my_cookie", "cooki_value", max_age=3600)  # 1시간동안 유지
+    return response
+
+
+def get_cookie_view(request):
+    """쿠키 가져오기"""
+    cookie_value = request.COOKIES.get("my_cookie", "쿠키가 없습니다.")
+    return HttpResponse(f"쿠키 값 : { cookie_value }")
+
+
+def delete_cookie_view(request):
+    """쿠키 삭제"""
+    response = HttpResponse("쿠키가 삭제되었습니다.")
+    response.delete_cookie("my_cookie")
+    return response
+
+
+# session은 클라이언트와 무관
+def set_session_view(request):
+    """세션 설정"""
+    # 세션은 request로 받아올 수 있다.
+    request.session["username"] = "DjangoUser"  # 세션값 저장
+    request.session.set_expiry(3600)  # 1시간 후 만료
+    return HttpResponse("세션이 설정되었습니다.")
+
+
+def get_session_view(request):
+    from django.contrib.sessions.models import Session
+    from django.contrib.sessions.backends.db import SessionStore
+
+    # 특정 세션 키 조회
+    session_key = "7m5neub6yuj20uaqpry4cxo6bzq2s7ze"  # 실제 저장된 session_key 입력
+    session = Session.objects.get(session_key=session_key)
+
+    # 세션 데이터 복호화
+    session_data = SessionStore(session_key=session_key).load()
+    print(session_data)  # {'username': 'DjangoUser'}
+
+    """세션 가져오기"""
+    username = request.session.get("username", "세션이 없습니다.")
+    return HttpResponse(f"세션 값 : { username }")
+
+
+def delete_session_view(request):
+    """세션 삭제"""
+    request.session.flush()  # 모든 세션 데이터 삭제
+    # request.session.clear()  # 세션의 세션 id만 삭제
+    return HttpResponse("세션이 삭제되었습니다.")

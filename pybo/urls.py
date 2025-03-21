@@ -15,4 +15,12 @@ urlpatterns = [
     ),  # dev_5
     # <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문등록</a>
     path("question/create/", views.question_create, name="question_create"),  # dev_9
+    # dev_14
+    path("set-cookie/", views.set_cookie_view, name="set_cookie"),
+    path("get-cookie/", views.get_cookie_view, name="get_cookie"),
+    path("delete-cookie/", views.delete_cookie_view, name="delete_cookie"),
+    # dev_14 session
+    path("set-session/", views.set_session_view, name="set_session"),
+    path("get-session/", views.get_session_view, name="get_session"),
+    path("delete-session/", views.delete_session_view, name="delete_session"),
 ]
