@@ -5,6 +5,7 @@ from pybo.form import AnswerForm, QuestionForm
 from pybo.models import Answer
 from pybo.models import Question
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -41,8 +42,12 @@ def detail(request, question_id):
 #    ),  # dev_5
 
 
-# dev_5 / dev_9
+# dev_5 / dev_9 / dev_16
+@login_required(login_url="common:login")
 def answer_create(request, question_id):
+
+    # request.user = AnonymousUser()    # dev_16
+
     # dev_9
     question = get_object_or_404(Question, pk=question_id)
 
@@ -50,20 +55,21 @@ def answer_create(request, question_id):
         form = AnswerForm(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
+            answer.author = request.user  # dev_16
             answer.create_date = timezone.now()
             answer.question = question
             answer.save()
             return redirect("pybo:detail", question_id=question.id)
 
-    else:
-        return HttpResponseNotAllowed("Only Post is possible")
-
+        else:
+            form = AnswerForm()
     context = {"question": question, "form": form}
     return render(request, "pybo/question_detail.html", context)
 
 
-# dev_9
+# dev_9 / dev_16
 # path("question/create/", views.question_create, name="question_create"),  # dev_9
+@login_required(login_url="common:login")
 def question_create(request):
 
     print(request.POST.get("content"))
@@ -72,6 +78,7 @@ def question_create(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
+            question.author = request.user  # dev_16
             question.create_date = timezone.now()
             question.save()
             return redirect("pybo:index")
@@ -79,3 +86,5 @@ def question_create(request):
     else:
         form = QuestionForm()
         return render(request, "pybo/question_form.html", {"form": form})
+
+    return render(request, "pybo/question_form.html", {"form": form})
