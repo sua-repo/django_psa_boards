@@ -15,4 +15,9 @@ urlpatterns = [
     ),  # dev_5
     # <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문등록</a>
     path("question/create/", views.question_create, name="question_create"),  # dev_9
+    path(
+        "question/modify/<int:question_id>/",
+        views.question_modify,
+        name="question_modify",
+    ),  # dev_17
 ]

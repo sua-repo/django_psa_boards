@@ -12,6 +12,7 @@ class Question(models.Model):
     subject = models.CharField(max_length=100)
     content = models.TextField()  # 글자 수 제한 없는 텍스트는 TextField를 사용
     create_date = models.DateTimeField()
+    modify_date = models.DateTimeField(null=True, blank=True)  # dev_17     # 수정일시
 
     def __str__(self):
         return self.subject
@@ -28,6 +29,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
     create_date = models.DateTimeField()
+    modify_date = models.DateTimeField(null=True, blank=True)  # dev_17     # 수정일시
 
 
 # Question.answer_set.all() => 역방향 참조 (O) / related_name="answers" => Question.answers.all()
