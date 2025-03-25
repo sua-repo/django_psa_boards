@@ -20,4 +20,15 @@ urlpatterns = [
         views.question_modify,
         name="question_modify",
     ),  # dev_17
+    path(
+        "question/delete/<int:question_id>/",
+        views.question_delete,
+        name="question_delete",
+    ),  # dev_17
+    path(
+        "answer/modify/<int:answer_id>/", views.answer_modify, name="answer_modify"
+    ),  # dev_17
+    path(
+        "answer/delete/<int:answer_id>/", views.answer_delete, name="answer_delete"
+    ),  # dev_17
 ]

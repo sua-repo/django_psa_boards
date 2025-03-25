@@ -7,6 +7,7 @@ from pybo.models import Question
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -114,3 +115,48 @@ def question_modify(request, question_id):
         form = QuestionForm(instance=question)
     context = {"form": form}
     return render(request, "pybo/question_form.html", context)
+
+
+@login_required(login_url="common:login")
+@require_POST  # GET 요청 차단
+def question_delete(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.user != question.author:
+        messages.error(request, "삭제 권한이 없습니다.")
+        return redirect("pybo:detail", question_id=question.id)
+    question.delete()
+    return redirect("pybo:index")
+
+
+@login_required(login_url="common:login")
+def answer_modify(request, answer_id):
+
+    answer = get_object_or_404(Answer, pk=answer_id)
+
+    if request.user != answer.author:
+        messages.error(request, "수정권한이 없습니다")
+        return redirect("pybo:detail", question_id=answer.question.id)
+
+    if request.method == "POST":
+        form = AnswerForm(request.POST, instance=answer)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.modify_date = timezone.now()
+            answer.save()
+            return redirect("pybo:detail", question_id=answer.question.id)
+    else:
+        form = AnswerForm(instance=answer)
+
+    context = {"answer": answer, "form": form}
+    return render(request, "pybo/answer_form.html", context)
+
+
+@login_required(login_url="common:login")
+@require_POST  # GET 요청 차단
+def answer_delete(request, answer_id):
+    answer = get_object_or_404(Answer, pk=answer_id)
+    if request.user != answer.author:
+        messages.error(request, "삭제 권한이 없습니다.")
+        return redirect("pybo:detail", question_id=answer.question.id)
+    answer.delete()
+    return redirect("pybo:detail", question_id=answer.question.id)
