@@ -38,4 +38,9 @@ urlpatterns = [
         answer_views.answer_delete,
         name="answer_delete",
     ),  # dev_18
+    path(
+        "question/vote/<int:question_id>/",
+        question_views.question_vote,
+        name="question_vote",
+    ),  # dev_20
 ]
