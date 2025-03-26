@@ -43,4 +43,7 @@ urlpatterns = [
         question_views.question_vote,
         name="question_vote",
     ),  # dev_20
+    path(
+        "answer/vote/<int:answer_id>/", answer_views.answer_vote, name="answer_vote"
+    ),  # dev_20
 ]

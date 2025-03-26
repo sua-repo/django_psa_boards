@@ -38,6 +38,7 @@
             </div>
             <!--로그인한 사용자와 글쓴이가 동일한 경우에만 노출 dev_17-->
             <div class="my-3">   
+                <!-- dev_20 글 추천 -->
                 <a href="javascript:void(0)" data-uri="{% url 'pybo:question_vote' question.id  %}" class="recommend btn btn-sm btn-outline-secondary"> 추천
                     <span class="badge rounded-pill bg-success">{{question.voter.count}}</span>
                 </a>  
@@ -76,7 +77,11 @@
                 </div>
             </div>
             <!--dev_18-->
-            <div class="my-3">                
+            <div class="my-3">     
+                <!-- dev_20 답변 추천 -->
+                <a href="javascript:void(0)" data-uri="{% url 'pybo:answer_vote' answer.id  %}" class="recommend btn btn-sm btn-outline-secondary"> 추천
+                    <span class="badge rounded-pill bg-success">{{answer.voter.count}}</span>
+                </a>           
                 {% if request.user == answer.author %}
                     <a href=" {% url 'pybo:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
                     <a href=" {% url 'pybo:answer_delete' answer.id %}" class="btn btn-sm btn-outline-secondary">삭제</a>
