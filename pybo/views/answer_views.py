@@ -1,6 +1,6 @@
 from urllib import response
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 
 from pybo.forms import AnswerForm, QuestionForm
 from pybo.models import Answer, Question
@@ -30,7 +30,11 @@ def answer_create(request, question_id):
             answer.create_date = timezone.now()
             answer.question = question
             answer.save()
-            return redirect("pybo:detail", question_id=question.id)
+            return redirect(
+                "{}#answer_{}".format(
+                    resolve_url("pybo:detail", question_id=question.id), answer.id
+                )
+            )
 
     else:
         return HttpResponseNotAllowed("Only POST is possible.")
@@ -56,7 +60,12 @@ def answer_modify(request, answer_id):
             answer = form.save(commit=False)
             answer.modify_date = timezone.now()
             answer.save()
-            return redirect("pybo:detail", question_id=answer.question.id)
+            return redirect(
+                "{}#answer_{}".format(
+                    resolve_url("pybo:detail", question_id=answer.question.id),
+                    answer.id,
+                )
+            )
     else:
         form = AnswerForm(instance=answer)
 
@@ -85,4 +94,8 @@ def answer_vote(request, answer_id):
         messages.error(request, "본인이 작성한 글은 추천할수 없습니다")
     else:
         answer.voter.add(request.user)
-    return redirect("pybo:detail", question_id=answer.question.id)
+    return redirect(
+        "{}#answer_{}".format(
+            resolve_url("pybo:detail", question_id=answer.question.id), answer.id
+        )
+    )
