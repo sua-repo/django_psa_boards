@@ -38,8 +38,11 @@ def index(request):
 
     paginator = Paginator(question_list, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
+
+    # dev_21
     context = {"question_list": page_obj, "page": page, "kw": kw}
 
+    # 리액트와 차이 : render = 다시 그린다(클라이언트 입장) = html을 만든다 = httpResponse 객체로 만든 후 html 태그를 클라이언트에게 보낸다
     return render(request, "pybo/question_list.html", context)
 
 
